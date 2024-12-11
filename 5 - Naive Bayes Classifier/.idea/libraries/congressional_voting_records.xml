@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="congressional+voting+records">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/untitled/data/congressional+voting+records.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
