@@ -11,8 +11,11 @@ import java.util.Random;
 public class CongressionalVotingClassifier {
 
     public static void main(String[] args) throws Exception {
+        //javac -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar" CongressionalVotingClassifier.java
+
         //java --add-opens java.base/java.lang=ALL-UNNAMED -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar;."
         // CongressionalVotingClassifier 0
+
         if (args.length == 0) {
             System.out.println("Usage: java CongressionalVotingClassifier <0 for abstained or 1 for imputation>");
             return;
@@ -24,17 +27,15 @@ public class CongressionalVotingClassifier {
             return;
         }
 
-        // Load dataset
+        // Load data
         String filePath = "D:\\СУ\\4ти курс\\IS\\homeworks\\Data Mining\\Tasks\\Data-Mining\\5 - Naive Bayes Classifier\\untitled\\data\\house-votes-84.arff"; // Replace with the correct path if necessary
         Instances data = DataSource.read(filePath);
         if (data == null) {
             throw new IOException("No source has been specified or file not found.");
         }
 
-        // Set the class index (last attribute as target class)
         data.setClassIndex(data.numAttributes() - 1);
 
-        // Handle missing values
         if (mode == 0) {
             // Treat '?' as a third class (abstained)
             for (int i = 0; i < data.numInstances(); i++) {
@@ -44,14 +45,14 @@ public class CongressionalVotingClassifier {
                     }
                 }
             }
-        } else if (mode == 1) {
-            // Impute missing values with the most frequent value (mode)
+        } else {
+            // Impute missing values with the most frequent value
             ReplaceMissingValues replaceMissingValues = new ReplaceMissingValues();
             replaceMissingValues.setInputFormat(data);
             data = Filter.useFilter(data, replaceMissingValues);
         }
 
-        // Stratified split into training (80%) and testing (20%) sets
+        // training (80%) and testing (20%) sets
         data.randomize(new Random(42));
         data.stratify(5); // Maintain class distribution
 
@@ -60,7 +61,7 @@ public class CongressionalVotingClassifier {
         Instances trainData = new Instances(data, 0, trainSize);
         Instances testData = new Instances(data, trainSize, testSize);
 
-        // Train NaiveBayes model
+        // NaiveBayes model
         NaiveBayes naiveBayes = new NaiveBayes();
         naiveBayes.buildClassifier(trainData);
 
@@ -68,7 +69,7 @@ public class CongressionalVotingClassifier {
         evaluateModel(naiveBayes, trainData, "Train Set");
 
         // Perform cross-validation
-        crossValidation(naiveBayes, trainData);
+        crossValidation(trainData);
 
         // Evaluate the model on test data
         evaluateModel(naiveBayes, testData, "Test Set");
@@ -87,7 +88,7 @@ public class CongressionalVotingClassifier {
         System.out.printf("Accuracy on %s: %.2f%%\n", label, accuracy);
     }
 
-    private static void crossValidation(NaiveBayes model, Instances data) throws Exception {
+    private static void crossValidation( Instances data) throws Exception {
         int folds = 10;
         System.out.println("Performing 10-fold cross-validation...");
 
