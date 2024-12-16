@@ -11,18 +11,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../../../../../../Java IntelliJ/weka/weka-3-8-5/weka.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../../../../../../../Java IntelliJ/weka/weka-3-8-5/weka-src.jar!/src/main/java" />
-          <root url="jar://$MODULE_DIR$/../../../../../../../../../Java IntelliJ/weka/weka-3-8-5/weka-src.jar!/src/test/java" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
