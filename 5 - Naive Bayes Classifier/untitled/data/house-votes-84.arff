@@ -1,4 +1,4 @@
-@relation house-votes
+@relation congressional-voting
 
 @attribute class {democrat,republican}
 @attribute handicapped-infants {y,n,?}

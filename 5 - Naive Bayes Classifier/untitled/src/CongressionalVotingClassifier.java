@@ -11,11 +11,6 @@ import java.util.Random;
 public class CongressionalVotingClassifier {
 
     public static void main(String[] args) throws Exception {
-        //javac -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar" CongressionalVotingClassifier.java
-
-        //java --add-opens java.base/java.lang=ALL-UNNAMED -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar;."
-        // CongressionalVotingClassifier 0
-
         if (args.length == 0) {
             System.out.println("Usage: java CongressionalVotingClassifier <0 for abstained or 1 for imputation>");
             return;
@@ -28,7 +23,7 @@ public class CongressionalVotingClassifier {
         }
 
         // Load data
-        String filePath = "D:\\СУ\\4ти курс\\IS\\homeworks\\Data Mining\\Tasks\\Data-Mining\\5 - Naive Bayes Classifier\\untitled\\data\\house-votes-84.arff"; // Replace with the correct path if necessary
+        String filePath = "D:\\СУ\\4ти курс\\IS\\homeworks\\Data Mining\\Tasks\\Data-Mining\\5 - Naive Bayes Classifier\\untitled\\data\\house-votes-84.arff";
         Instances data = DataSource.read(filePath);
         if (data == null) {
             throw new IOException("No source has been specified or file not found.");
@@ -46,13 +41,13 @@ public class CongressionalVotingClassifier {
                 }
             }
         } else {
-            // Impute missing values with the most frequent value
+            // Replace missing values with the most frequent value
             ReplaceMissingValues replaceMissingValues = new ReplaceMissingValues();
             replaceMissingValues.setInputFormat(data);
             data = Filter.useFilter(data, replaceMissingValues);
         }
 
-        // training (80%) and testing (20%) sets
+        // Split data into training (80%) and testing (20%) sets
         data.randomize(new Random(42));
         data.stratify(5); // Maintain class distribution
 
@@ -61,8 +56,9 @@ public class CongressionalVotingClassifier {
         Instances trainData = new Instances(data, 0, trainSize);
         Instances testData = new Instances(data, trainSize, testSize);
 
-        // NaiveBayes model
+        // Initialize NaiveBayes with Laplace smoothing
         NaiveBayes naiveBayes = new NaiveBayes();
+        naiveBayes.setUseSupervisedDiscretization(false); // Ensure standard Naive Bayes is used
         naiveBayes.buildClassifier(trainData);
 
         // Evaluate the model on training data
@@ -88,7 +84,7 @@ public class CongressionalVotingClassifier {
         System.out.printf("Accuracy on %s: %.2f%%\n", label, accuracy);
     }
 
-    private static void crossValidation( Instances data) throws Exception {
+    private static void crossValidation(Instances data) throws Exception {
         int folds = 10;
         System.out.println("Performing 10-fold cross-validation...");
 
@@ -98,6 +94,7 @@ public class CongressionalVotingClassifier {
             Instances test = data.testCV(folds, i);
 
             NaiveBayes foldModel = new NaiveBayes();
+            foldModel.setUseSupervisedDiscretization(false);
             foldModel.buildClassifier(train);
 
             int correct = 0;
@@ -126,4 +123,16 @@ public class CongressionalVotingClassifier {
         System.out.printf("Average Accuracy: %.2f%%\n", mean);
         System.out.printf("Standard Deviation: %.2f%%\n", stdDev);
     }
+
 }
+
+
+
+
+
+
+
+
+//javac -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar" CongressionalVotingClassifier.java
+
+//java --add-opens java.base/java.lang=ALL-UNNAMED -cp "D:\Java IntelliJ\weka\Weka-3-8-6\weka.jar;." CongressionalVotingClassifier 0

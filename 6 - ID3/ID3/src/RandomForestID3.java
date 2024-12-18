@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class RandomForestID3 {
-
-    // DataProcessor class for reading and preparing data
     static class DataProcessor {
         private List<Map<String, String>> data;
         private List<String> attributes;
@@ -87,6 +85,7 @@ public class RandomForestID3 {
             root = buildTree(data, attributes, 0);
         }
 
+        //train the tree
         private Node buildTree(List<Map<String, String>> data, List<String> attributes, int depth) {
             if (data.isEmpty() || attributes.isEmpty() || depth >= maxDepth || isHomogeneous(data)) {
                 Node leaf = new Node();
@@ -129,6 +128,7 @@ public class RandomForestID3 {
             return bestAttribute;
         }
 
+        //calc the inf winning
         private double calculateInformationGain(List<Map<String, String>> data, String attribute) {
             double totalEntropy = calculateEntropy(data);
             Map<String, List<Map<String, String>>> partitions = partitionData(data, attribute);
@@ -165,7 +165,7 @@ public class RandomForestID3 {
             return entropy;
         }
 
-
+        //Проверява дали всички данни в даден възел принадлежат на един клас.
         private boolean isHomogeneous(List<Map<String, String>> data) {
             return data.stream().map(row -> row.get("class")).distinct().count() == 1;
         }
@@ -219,6 +219,7 @@ public class RandomForestID3 {
             this.trees = new ArrayList<>();
         }
 
+        //Създава дървета чрез обучение върху bootstrap извадки от данните.
         public void train(List<Map<String, String>> data, List<String> attributes) {
             Random rand = new Random();
             for (int i = 0; i < numTrees; i++) {
